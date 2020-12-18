@@ -116,14 +116,19 @@ order by avg(salary) desc;
 정렬은 입사일로 오름차순으로 정렬합니다.
 */
 
-select case to_char(hire_date,'yy') "입사년도"
-            when to_char(hire_date,'yy')  then "창립멤버"
-            when to_char(hire_date,'yy')  then "03년 입사"
-            when to_char(hire_date,'yy')  then "04년 입사"
-            else "상장이후입사"
+select  to_char(hire_date,'yy') "입사년도",
+        case
+            when to_char(hire_date,'yy') <'03' then '창립멤버'
+            when to_char(hire_date,'yy') ='03' then '03년 입사'
+            when to_char(hire_date,'yy') ='04' then '04년 입사'
+            else '상장이후입사'
      END    
 from employees
-group by hire_date;
+group by to_char(hire_date,'yy')
+order by "입사년도";
+
+
+
 
 select employee_id,
         first_name,
