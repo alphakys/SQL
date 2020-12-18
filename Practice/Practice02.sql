@@ -47,22 +47,23 @@ order by department_id desc;
 (정렬순서는 최소임금 2500 구간일때 확인해볼 것)
 */
 select  job_id,
-        trunc(avg(salary),0),
-        max(salary),
-        min(salary)
+        avg(salary)"평균임금",
+        max(salary)"최고임금",
+        min(salary)"최저임금"
 from employees
 group by job_id
-order by  round(avg(salary),0) asc, min(salary) desc;
+order by "평균임금" asc , "최저임금" desc;
 
 /*문제6.
 가장 오래 근속한 직원의 입사일은 언제인가요? 다음 형식으로 출력해주세요.
 예) 2001-01-13 토요일 
 */
 
-select hire_date
+select to_char(min(hire_date),'yyyy-mm-dd day')
+             
+from employees;
 
-from employees
-group by hire_date;
+
 
 /*문제7.
 평균임금과 최저임금의 차이가 2000 미만인 부서(department_id), 
@@ -70,9 +71,9 @@ group by hire_date;
 내림차순으로 정렬해서 출력하세요
 */
 select department_id,
-        avg(salary),
-        min(salary),
-        avg(salary) - min(salary)
+        avg(salary)"평균임금",
+        min(salary)"최저임금",
+        avg(salary) - min(salary) "평균임금 - 최저임금"
 from employees
 group by department_id
 having (avg(salary) - min(salary))<2000
@@ -83,12 +84,13 @@ order by (avg(salary)- min(salary)) desc;
 차이를 확인할 수 있도록 내림차순으로 정렬하세요?
 */
 
-select  job_id,
-        
-        max(salary)-min(salary)
+select  job_id "업무",
+        max(salary) "최고임금",
+        min(salary) "최저임금",
+        max(salary)-min(salary) "최고임금 - 최저임금"
 from employees
 group by job_id
-order by max(salary)-min(salary) desc;
+order by "최고임금 - 최저임금" desc;
 
 /*문제9
 2005년 이후 입사자중 관리자별로 평균급여 최소급여 최대급여를 알아보려고 한다.
@@ -97,13 +99,14 @@ order by max(salary)-min(salary) desc;
 */
 
 select  manager_id,
-        round(avg(salary),0),
-        min(salary),
-        max(salary)
+        hire_date,
+        round(avg(salary),0) "평균급여",
+        min(salary) "최소급여",
+        max(salary) "최대급여"
 from employees
-group by manager_id
-where hire_date >='2005'
-having avg(salary)>=5000 
+group by manager_id, hire_date
+having avg(salary)>=5000 and to_char(hire_date,'yy') > 05
+
 order by avg(salary) desc;
 
 /*문제10
@@ -122,14 +125,14 @@ select  to_char(hire_date,'yy') "입사년도",
             when to_char(hire_date,'yy') ='03' then '03년 입사'
             when to_char(hire_date,'yy') ='04' then '04년 입사'
             else '상장이후입사'
-     END    
+     END optDate   
 from employees
 group by to_char(hire_date,'yy')
-order by "입사년도";
+order by "입사년도" asc;
 
 
 
-
+--인터넷에서 찾은 추가문제 풀이--
 select employee_id,
         first_name,
         hire_date
@@ -184,8 +187,7 @@ group by to_char(hire_date,'q')
 order by "분기";
         
 
-select case
-        when to_char(hire_date,'mm')
+
 
 
 
