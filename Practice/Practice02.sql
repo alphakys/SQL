@@ -132,6 +132,7 @@ order by "입사년도" asc;
 
 
 
+
 --인터넷에서 찾은 추가문제 풀이--
 select employee_id,
         first_name,
