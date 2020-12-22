@@ -125,12 +125,13 @@ select employee_id,
         first_name,
         e.salary,
         e.department_id,
-        avgsal.salary
-from employees e, (select department_id, avg(salary) salary
-                                 from employees
-                                 group by department_id) avgSal
+        avgsal.salary,
+        avgSal.department_id
+from employees e, (select avg(salary) salary,department_id
+                    from employees
+                    group by department_id) avgSal
 
-where e.salary > avgSal.salary and e.department_id = avgSal.department_id;
+where e.salary > avgSal.salary and avgSal.department_id = e.department_id;
 
 
 /*문제8.
