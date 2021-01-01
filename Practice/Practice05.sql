@@ -4,7 +4,9 @@
 (45건)
 */
 
-select first_name,
+
+
+select first_name, salary*1,
         manager_id,
         commission_pct,
         salary
