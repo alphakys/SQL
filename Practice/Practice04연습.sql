@@ -116,16 +116,33 @@ where department_id is not null
 group by department_id;
 
 --8.
-select rank() OVER (ORDER BY hire_date asc) R
-       
-from employees
-where R > 10 and R < 16;
+select 
+        em.employee_id,
+        em.first_name,
+        em.salary,
+        em.hire_date       
+from employees em, (select rank() OVER (ORDER BY hire_date asc) R,
+                            employee_id,
+                            first_name,
+                            salary,
+                            hire_date       
+                    from employees) emFor
+where R >'10' and R <'16' and em.employee_id = emFor.employee_id;
 
-select employee_id
-from employees
-where 
 
 
+select 
+        employee_id,
+        first_name,
+        salary,
+        hire_date       
+from (select rank() OVER (ORDER BY hire_date asc) R,
+                            employee_id,
+                            first_name,
+                            salary,
+                            hire_date       
+                    from employees) emFor
+where R >'10' and R <'16';
 
 
 
