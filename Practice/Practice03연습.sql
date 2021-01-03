@@ -115,6 +115,16 @@ where de.manager_id = em.employee_id and de.location_id = l.location_id
       and l.country_id = c.country_id and c.region_id = r.region_id
 order by de.department_id asc;
 
+--9.
+select   em.employee_id,
+        em.first_name,
+        department_name,
+        man.first_name "매니저 이름"
+from employees em left outer join employees man
+on   em.manager_id = man.employee_id
+                  inner join departments de
+on   em.department_id = de.department_id
+order by em.employee_id asc;
 
 
 
