@@ -48,10 +48,16 @@ select *
 from departments;
 
 --4.
-
-
-
-
+select em.employee_id,
+        em.first_name "직원",
+        department_name,
+        em.manager_id,
+        man.first_name "매니저"
+from employees em left outer join
+                  departments de
+on em.department_id = de.department_id
+                 left outer join employees man
+on em.manager_id = man.employee_id;
 
 
                                         
@@ -105,6 +111,101 @@ from    (select  rownum r,
               order by hire_date asc)
 ) ro
 where ro.r > '10' and ro.r < '21';
+
+--6.
+select first_name||' '||last_name,
+        salary,
+        hire_date,
+        department_name
+from   employees em, departments de
+where hire_date in (select  max(hire_date) from employees) and
+      em.department_id = de.department_id;
+
+--7.
+
+select  employee_id,
+        first_name,
+        last_name,
+        job_title,
+        salary
+from employees em, jobs j
+where department_id = (select department_id
+
+                        from (select  rank() over(order by avg(salary) desc) r,
+                                    department_id,
+                                    avg(salary)
+                        from employees
+                        group by department_id
+                        having department_id is not null) R
+                        where R.r='1') 
+and em.job_id = j.job_id;
+/*
+select  rank() over(order by avg(salary) desc),
+        department_id,
+        avg(salary)
+from employees
+group by department_id
+having department_id is not null;
+*/
+
+--8.
+select  department_name
+from  departments de
+where
+de.department_id = (select    department_id
+                    from      (select rank() over(order by avg(salary) desc) r,
+                                        department_id
+                                from employees 
+                                group by department_id
+                                having department_id is not null)
+                    where r='1');
+
+--9.
+select country_id
+from locations
+where location_id=(select location_id
+from departments
+where department_id = (select department_id
+                        from   (select rank() over(order by avg(salary) desc) r,
+                        department_id
+                        from employees
+                        group by department_id)
+                        where r='1'));
+
+--10.
+select first_name
+from employees
+where job_id in (select job_id
+                from   jobs 
+                where job_title = 'Administration Vice President');
+
+select job_title
+from jobs
+where job_id = (select job_id
+from
+(select  rank() over (order by avg(salary) desc) r,
+        job_id,
+        avg(salary)
+from employees
+group by job_id)
+where r='1');
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
